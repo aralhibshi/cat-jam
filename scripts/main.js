@@ -29,7 +29,7 @@ function showOverlay() {
 showOverlay()
 
 // AUDIO ---
-const audioArray = ["theme", "thud", "hop"]
+const audioArray = ["theme", "win", "thud", "horizontal", "vertical"]
 
 audioArray.forEach(element => {
     const audio = new Audio("sounds/" + element + ".mp3")
@@ -38,8 +38,10 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.25
-hop.volume = 0.25
+theme.volume = 0.5
+win.volume = 0.5
+horizontal.volume = 0.55
+vertical.volume = 0.32
 
 console.log($('audio'))
 
@@ -106,28 +108,35 @@ if (isOverlay) {
 // ACTIONS ---
 let position = 1
 let posArray = [11, 21, 31, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
-let win = false
+let gameWin = false
 
 // Names
 let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa"]
 let intName = randomInt(0, names.length - 1)
 
-// Win Condition
+// gameWin Condition
 function winCondition() {
     if (intGoal === position) {
         body.append(`<p>${names[intName]}</p>`)
         player.css("background-image", "url('/images/player-win.gif'")
-        return win = true
+        theme.pause()
+        win.pause()
+        win.currentTime = 0
+        win.play()
+        return gameWin = true
     }
 }
 
 const action = {
     moveLeft() {
-        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !win) {
+        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin) {
             position--
             player.animate({ left: '-=10vw'}, 120)
             player.css("transform", "scaleX(-1)")
-        } else if (!win) {
+            horizontal.pause()
+            horizontal.currentTime = 0
+            horizontal.play()
+        } else if (!gameWin) {
             player.effect("shake", {distance: 8, direction: "left"}, 200)
             player.css("filter", "grayscale(100%)")
             thud.pause()
@@ -137,14 +146,14 @@ const action = {
         winCondition()
     },
     moveUp() {
-        if (!(position <= 10) && !win) {
+        if (!(position <= 10) && !gameWin) {
             position -= 10
-            player.animate({ top: "-=10vw"}, 120)
-            player.effect("shake", {distance: 5, direction: "up"}, 100)
-            hop.pause()
-            hop.currentTime = 0
-            hop.play()
-        } else if (!win) {
+            player.animate({ top: "-=10vw"}, 80)
+            player.effect("shake", {distance: 6, direction: "up"}, 100)
+            vertical.pause()
+            vertical.currentTime = 0
+            vertical.play()
+        } else if (!gameWin) {
             player.effect("shake", {distance: 8, direction: "up"}, 200)
             player.css("filter", "grayscale(100%)")
             thud.pause()
@@ -154,11 +163,14 @@ const action = {
         winCondition()
     },
     moveRight() {
-        if (position % 10 !== 0 && !win) {
+        if (position % 10 !== 0 && !gameWin) {
             position++
             player.animate({left: '+=10vw'}, 120)
             player.css("transform", "")
-        } else if (!win) {
+            horizontal.pause()
+            horizontal.currentTime = 0
+            horizontal.play()
+        } else if (!gameWin) {
             player.effect("shake", {distance: 8, direction: "right"}, 200)
             player.css("filter", "grayscale(100%)")
             thud.pause()
@@ -168,14 +180,14 @@ const action = {
         winCondition()
     },
     moveDown() {
-        if (!posArray.slice(3, 13).includes(position) && !win) {
+        if (!posArray.slice(3, 13).includes(position) && !gameWin) {
             position += 10
-            player.animate({ top: "+=10vw"}, 120)
-            player.effect("shake", {distance: 5, direction: "up"}, 100)
-            hop.pause()
-            hop.currentTime = 0
-            hop.play()
-        } else if (!win) {
+            player.animate({ top: "+=10vw"}, 80)
+            player.effect("shake", {distance: 6, direction: "up"}, 100)
+            vertical.pause()
+            vertical.currentTime = 0
+            vertical.play()
+        } else if (!gameWin) {
             player.effect("shake", {distance: 8, direction: "down"}, 200)
             player.css("filter", "grayscale(100%)")
             thud.pause()
