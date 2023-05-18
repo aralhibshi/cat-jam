@@ -3,12 +3,12 @@ let body = $('body')
 body.prepend("<div class='grid-container'></div>")
 
 let gridContainer = $('.grid-container')
-gridContainer.css("z-index", 1)
+gridContainer.css("z-index", 0)
 gridContainer.prepend("<div id='player'></div>")
 
 let player = $('#player')
 player.css("background-image", "url('/images/player.webp')")
-player.css("z-index", 2)
+player.css("z-index", 1)
 
 for (let i = 1; i < 51; i++) {
     gridContainer.append(`<div class='grid-items item${i}'></div>`)
@@ -16,21 +16,17 @@ for (let i = 1; i < 51; i++) {
 }
 
 // OVERLAY / MENU
-let showOverlay = true
+let isOverlay = true
 
-function overlay() {
-    if (showOverlay) {
+function showOverlay() {
+    if (isOverlay) {
         body.prepend("<div id='overlay'></div>")
         let overlay = $('#overlay')
-
-        overlay
-        .css("background-color", "gray")
-        .css("height", "100%")
-        .css("width", "100%")
-        .css("z-index", "2")
+        overlay.css({"background-color": "rgba(128, 128, 128)", "height": "100vh", "width": "100vw", "z-index": 3, "position": "absolute", "left": 0, "top": 0})
     }
+    return overlay
 }
-overlay()
+showOverlay()
 
 // AUDIO ---
 const audioArray = ["theme", "thud", "hop"]
@@ -42,7 +38,7 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.4
+theme.volume = 0.25
 hop.volume = 0.25
 
 console.log($('audio'))
@@ -68,7 +64,7 @@ function startGame () {
     let goal = '.item' + intGoal
 
     $(goal).css("border", "5px solid green")
-    $(goal).css("z-index", 1)
+    $(goal).css("z-index", 2)
 
     $(document).ready(function(){
         $(this).keydown(function(e) {
@@ -87,9 +83,25 @@ function startGame () {
             }
         })
     })
+    return isOverlay = false
 }
 
+console.log(isOverlay)
+
 // startGame()
+
+// Start Game Button
+if (isOverlay) {
+    body.append("<button id='start-game'>Start Game</button>")
+    let start = $("#start-game")
+
+    start.css({"position": "absolute", "z-index": 3, "top": "50vh", "left": "40vw", "width": "20vw", "height": "10vh", "border-radius": "20vw", "font-size": "30px",  "margin": 0})
+    start.on("click", () => {
+        startGame()
+        overlay.remove()
+        start.remove()
+    })
+}
 
 // ACTIONS ---
 let position = 1
