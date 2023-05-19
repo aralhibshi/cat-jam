@@ -1,5 +1,9 @@
 body {
-    background-color: rgb(81, 81, 81);
+    /* font-family: 'Courier New', Courier, monospace;
+     */
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: bold;
+    background-color: rgb(75, 75, 75);
 }
 
 #player {
@@ -29,4 +33,66 @@ body {
 
 .grid-goal {
     border: 1px solid blue;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+button {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: bold;
+    background-color:rgb(245, 245, 220);
+    font-size: 4vh;
+    height: 10vh;
+    width: 20vw;
+    border-radius: 26% 26% 26% 26% / 80% 80% 80% 80%;
+    margin: 3vh 0;
+    border: 0.5vw solid rgb(245, 245, 220);
+    /* box-shadow: 0.15vw 0.8vh rgba(0, 0, 0, 0.15); */
+}
+
+.container button:hover {
+    cursor: pointer;
+}
+
+#new-game:hover, #skip-btn:hover {
+    background-color: rgb(255, 221, 221);
+    border: 0.5vw solid rgb(230, 0, 0);
+}
+
+#continue-game:hover, #continue-btn:hover, #menu:hover {
+    background-color: rgb(231, 255, 229);
+    border: 0.5vw solid rgb(0, 196, 10);
+    cursor: pointer;
+}
+
+#bar {
+    font-size: 3vw;
+    display: flex;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#bar p {
+    margin: 0
+}
+
+#bar button {
+    font-size: 1.6vw;
+    z-index: 4;
+    height: 6vh;
+    width: 8vw;
+    margin: 0
 }

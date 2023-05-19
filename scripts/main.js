@@ -15,7 +15,7 @@ for (let i = 1; i < 51; i++) {
     $('#grid-item').css("border", "2px solid black")
 }
 
-// OVERLAY / MENU
+// OVERLAY / MENU ---
 let isOverlay = true
 
 function showOverlay() {
@@ -38,18 +38,35 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.5
-win.volume = 0.5
+theme.volume = 0.6
+win.volume = 0.6
 horizontal.volume = 0.55
 vertical.volume = 0.32
-
-console.log($('audio'))
 
 audioArray.forEach(element => {
     return element = $('#' + element)
 })
 
+// Audio Control
+function audioControl (audio) {
+    audio.pause()
+    audio.currentTime = 0
+    audio.play()
+}
+
+// NEW GAME ---
+
+// Names
+let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa", "Manar", "Mariam Merza", "Maryam Ismail", "Maryam Alnajem", "Rawan", "Ruqaya", "Salman Hamad", "Salman Murtaza", "Sarah", "Saud", "Sayed", "Sumaya", "Waleed", "Zainab AbdulJalil", "Zainab Adel", "Zainab Mohammed", "Zainab Saeed"]
+
+// New Game Function
+function newGameStart() {
+    localStorage.setItem("names", JSON.stringify(names))
+    console.log(JSON.parse(localStorage.getItem("names")))
+}
+
 // START GAME ---
+let gameWin = false
 
 // Random Integer
 function randomInt(min, max) {
@@ -59,9 +76,20 @@ function randomInt(min, max) {
 let intGoal = randomInt(3, 50)
 
 function startGame () {
-    theme.pause()
-    theme.currentTime = 0
-    theme.play()
+    audioControl(theme)
+    
+    body.prepend("<div id='bar'></div>")
+    let bar = $('#bar')
+
+    bar.append("<button id='menu'>Menu</button>")
+    let menu = $('#menu')
+    
+    menu.on("click", () => {
+        window.location.reload()
+    })
+
+    bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} Left</p>`)
+    $('#amount').css("text-align", "right")
 
     let goal = '.item' + intGoal
 
@@ -85,114 +113,150 @@ function startGame () {
             }
         })
     })
-    return isOverlay = false
+    return isOverlay = false, bar
 }
 
-console.log(isOverlay)
-
-// startGame()
-
-// Start Game Button
+// Buttons
 if (isOverlay) {
-    body.append("<button id='start-game'>Start Game</button>")
-    let start = $("#start-game")
+    body.append("<div class='container'></div>")
+    let container = $('.container')
 
-    start.css({"position": "absolute", "z-index": 3, "top": "50vh", "left": "40vw", "width": "20vw", "height": "10vh", "border-radius": "20vw", "font-size": "30px",  "margin": 0})
-    start.on("click", () => {
+    container.append("<button id='new-game'>New Game</button>")
+    let newGame = $("#new-game")
+
+    container.append("<button id='continue-game'>Continue Game</button>")
+    let continueGame = $("#continue-game")
+
+    newGame.on("click", () => {
+        let response = confirm("New Game?")
+
+        if (response) {
+            console.log("Ok was pressed")
+
+            newGameStart()
+            startGame()
+            overlay.remove()
+            continueGame.remove()
+            newGame.remove()
+        } else {
+            console.log("Cancel was pressed")
+        }
+    })
+
+    continueGame.on("click", () => {
         startGame()
         overlay.remove()
-        start.remove()
+        continueGame.remove()
+        newGame.remove()
     })
 }
 
-// ACTIONS ---
-let position = 1
-let posArray = [11, 21, 31, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
-let gameWin = false
+// WIN CONDITION ---
+let getNames = JSON.parse(localStorage.getItem("names"))
 
-// Names
-let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa"]
-let intName = randomInt(0, names.length - 1)
+console.log(getNames)
+let intName = randomInt(0, getNames.length - 1)
 
-// gameWin Condition
+// Win Outcome
 function winCondition() {
     if (intGoal === position) {
-        body.append(`<p>${names[intName]}</p>`)
+        let namesGet = localStorage.getItem("names")
+        console.log(JSON.parse(namesGet)[intName])
+        
+        bar.append(`${JSON.parse(namesGet)[intName]}`)
         player.css("background-image", "url('/images/player-win.gif'")
+
+        $('.container').append("<button id='skip-btn'>Skip</button>")
+        let skipBtn = $('#skip-btn')
+
+        $('.container').append("<button id='continue-btn'>Continue</button")
+        let continueBtn = $('#continue-btn')
+
+        skipBtn.on("click", () => {
+            window.location.reload()
+        })
+        
+        continueBtn.on("click", () => {
+            let currentNames = JSON.parse(namesGet)
+            console.log(currentNames)
+
+            currentNames.splice(intName, 1)
+            console.log(currentNames)
+
+            localStorage.setItem("names", JSON.stringify(currentNames))
+            window.location.reload()
+        })
+
         theme.pause()
-        win.pause()
-        win.currentTime = 0
-        win.play()
+        audioControl(win)
         return gameWin = true
     }
 }
 
+// MOVEMENT ---
+let position = 1
+let posArray = [11, 21, 31, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
+
+// Horizontal Movement
+function horizontalMove(leftValue, transformValue) {
+    player.animate({ left: leftValue}, 80)
+    player.css("transform", transformValue)
+    audioControl(horizontal)
+}
+
+// Vertical Movement
+function verticalMove(topValue, way) {
+    player.animate({ top: topValue}, 50)
+    player.effect("shake", {distance: 7, direction: way}, 100)
+    audioControl(vertical)
+}
+
+// Player Filter Gray
+function blockMove(way) {
+    player.effect("shake", {distance: 8, direction: way}, 220)
+    player.css("filter", "grayscale(100%)")
+
+    setTimeout(function() {
+        player.css("filter", "")
+    }, 800)
+    audioControl(thud)
+}
+
+// Actions
 const action = {
     moveLeft() {
         if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin) {
             position--
-            player.animate({ left: '-=10vw'}, 120)
-            player.css("transform", "scaleX(-1)")
-            horizontal.pause()
-            horizontal.currentTime = 0
-            horizontal.play()
+            horizontalMove("-=10vw", "scaleX(-1)")
         } else if (!gameWin) {
-            player.effect("shake", {distance: 8, direction: "left"}, 200)
-            player.css("filter", "grayscale(100%)")
-            thud.pause()
-            thud.currentTime = 0
-            thud.play()
+            blockMove("left")
         }
         winCondition()
     },
     moveUp() {
         if (!(position <= 10) && !gameWin) {
             position -= 10
-            player.animate({ top: "-=10vw"}, 80)
-            player.effect("shake", {distance: 6, direction: "up"}, 100)
-            vertical.pause()
-            vertical.currentTime = 0
-            vertical.play()
+            verticalMove("-=10vw", "up")
         } else if (!gameWin) {
-            player.effect("shake", {distance: 8, direction: "up"}, 200)
-            player.css("filter", "grayscale(100%)")
-            thud.pause()
-            thud.currentTime = 0
-            thud.play()
+            blockMove("up")
         }
         winCondition()
     },
     moveRight() {
         if (position % 10 !== 0 && !gameWin) {
             position++
-            player.animate({left: '+=10vw'}, 120)
-            player.css("transform", "")
-            horizontal.pause()
-            horizontal.currentTime = 0
-            horizontal.play()
+            horizontalMove("+=10vw", "")
         } else if (!gameWin) {
-            player.effect("shake", {distance: 8, direction: "right"}, 200)
-            player.css("filter", "grayscale(100%)")
-            thud.pause()
-            thud.currentTime = 0
-            thud.play()
+            blockMove("right")
         }
         winCondition()
     },
     moveDown() {
         if (!posArray.slice(3, 13).includes(position) && !gameWin) {
             position += 10
-            player.animate({ top: "+=10vw"}, 80)
-            player.effect("shake", {distance: 6, direction: "up"}, 100)
-            vertical.pause()
-            vertical.currentTime = 0
-            vertical.play()
+            verticalMove("+=10vw", "up")
         } else if (!gameWin) {
-            player.effect("shake", {distance: 8, direction: "down"}, 200)
-            player.css("filter", "grayscale(100%)")
-            thud.pause()
-            thud.currentTime = 0
-            thud.play()
+            blockMove("down")
         }
         winCondition()
     }
