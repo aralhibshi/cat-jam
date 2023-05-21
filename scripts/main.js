@@ -99,16 +99,16 @@ function startGame () {
     $(document).ready(function(){
         $(this).keydown(function(e) {
             e.preventDefault()
-            if (e.keyCode == 37) {
+            if (e.keyCode == 37 && !gameWin) {
                 action.moveLeft()
             }
-            if (e.keyCode == 38) {
+            if (e.keyCode == 38 && !gameWin) {
                 action.moveUp()
             }
-            if (e.keyCode == 39) {
+            if (e.keyCode == 39 && !gameWin) {
                 action.moveRight()
             }
-            if (e.keyCode == 40) {
+            if (e.keyCode == 40 && !gameWin) {
                 action.moveDown()
             }
         })
@@ -163,29 +163,96 @@ function winCondition() {
         let namesGet = localStorage.getItem("names")
         console.log(JSON.parse(namesGet)[intName])
         
-        bar.append(`${JSON.parse(namesGet)[intName]}`)
+        // bar.append(`${JSON.parse(namesGet)[intName]}`)
+
         player.css("background-image", "url('/images/player-win.gif'")
 
-        $('.container').append("<button id='skip-btn'>Skip</button>")
-        let skipBtn = $('#skip-btn')
-
-        $('.container').append("<button id='continue-btn'>Continue</button")
-        let continueBtn = $('#continue-btn')
-
-        skipBtn.on("click", () => {
-            window.location.reload()
-        })
+        let container = $('.container')
+        container.append("<p class='win-text'>You Win!</p>")
         
-        continueBtn.on("click", () => {
-            let currentNames = JSON.parse(namesGet)
-            console.log(currentNames)
+        // Win
+        setTimeout(() => {
+            body.append("<img class='win-screen' src='images/win.png'>")
+            let winScreen = $('.win-screen')
 
-            currentNames.splice(intName, 1)
-            console.log(currentNames)
+            winScreen
+            .hide()
+            .css({"height": "100vh", "width": "100vw", "z-index": 4, "position": "absolute", "top": 0, "left": 0})
+            .fadeIn(1000)
 
-            localStorage.setItem("names", JSON.stringify(currentNames))
-            window.location.reload()
-        })
+            // Buttons
+            setTimeout(() => {
+                container.append("<div class='btn-container'></div")
+                let btnContainer = $('.btn-container')
+
+                btnContainer.css({"display": "flex"})
+
+                btnContainer.append("<button class='win-btns skip-btn'>Skip</button>")
+                let skipBtn = $('.skip-btn')
+
+                btnContainer.append("<button class='win-btns continue-btn'>Continue</button")
+                let continueBtn = $('.continue-btn')
+
+                skipBtn.on("click", () => {
+                    window.location.reload()
+                })
+            
+                continueBtn.on("click", () => {
+                    let currentNames = JSON.parse(namesGet)
+                    console.log(currentNames)
+
+                    currentNames.splice(intName, 1)
+                    console.log(currentNames)
+
+                    localStorage.setItem("names", JSON.stringify(currentNames))
+                    window.location.reload()
+                })
+                
+
+                container.css("justify-content", "end")
+                
+            }, 3000)
+
+            $('#win-text').remove()
+
+        }, 1500)
+
+        // Show Player
+        setTimeout(() => {
+            audioControl(horizontal)
+
+            body.prepend("<div id='player'></div>")
+            let player = $('#player')
+            player
+            .css({"background-image": "url('/images/player-win.gif')", "z-index": 6, "left": '-10vw', "top": "80vh", "height": "10vh", "width": "10vh", "background-size": "100%"})
+            .animate({"left": "5vw"})
+
+            let counter = 0
+
+            setTimeout(()=> {
+                const timer = setInterval(function (){
+                    audioControl(horizontal)
+                    player.animate({"left": "+=8vw"})
+                    counter++
+                    if (counter === 5){
+                        clearInterval(timer)
+                    }
+                }, 380)
+            }, 200)
+
+        }, 2700)
+
+        // Win Message
+        setTimeout(() => {
+            $('.win-text').remove()
+
+            container.prepend((`<p class='win-message'>You saved <div class='student-name'>${JSON.parse(namesGet)[intName]}</div></p>`))
+            container.prepend("<p class='win-message'>Congratulations Mr. catJam!</p>")
+
+            container.css({"z-index": 10, "justify-content": "center"})
+
+
+        }, 5500)
 
         theme.pause()
         audioControl(win)
@@ -195,7 +262,7 @@ function winCondition() {
 
 // MOVEMENT ---
 let position = 1
-let posArray = [11, 21, 31, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
+let posArray = [11, 21, 31, 41]
 
 // Horizontal Movement
 function horizontalMove(leftValue, transformValue) {
@@ -213,12 +280,13 @@ function verticalMove(topValue, way) {
 
 // Player Filter Gray
 function blockMove(way) {
+    gridContainer.effect("shake", {distance: 8, direction: way}, 220)
     player.effect("shake", {distance: 8, direction: way}, 220)
     player.css("filter", "grayscale(100%)")
 
     setTimeout(function() {
         player.css("filter", "")
-    }, 800)
+    }, 900)
     audioControl(thud)
 }
 
@@ -252,7 +320,7 @@ const action = {
         winCondition()
     },
     moveDown() {
-        if (!posArray.slice(3, 13).includes(position) && !gameWin) {
+        if (!(position >= 41) && !gameWin) {
             position += 10
             verticalMove("+=10vw", "up")
         } else if (!gameWin) {

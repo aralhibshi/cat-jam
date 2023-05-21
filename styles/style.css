@@ -63,20 +63,50 @@ button {
 
 .container button:hover {
     cursor: pointer;
+    z-index: 3;
 }
 
-#new-game:hover, #skip-btn:hover {
+.win-container {
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    width: 100vw;
+    height: 100vh;
+}
+
+.win-message {
+    font-family: 'Press Start 2P', cursive;
+    color: white;
+    font-size: 2.8rem;
+}
+
+.win-btns {
+    font-size: 1.3rem;
+    height: 5vh;
+    width: 8vw;
+    margin: 0 1vw;
+}
+
+.student-name {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 4rem;
+    color: green
+}
+
+#new-game:hover, .skip-btn:hover {
     background-color: rgb(255, 221, 221);
     border: 0.5vw solid rgb(230, 0, 0);
+    z-index: 6;
 }
 
-#continue-game:hover, #continue-btn:hover, #menu:hover {
+#continue-game:hover, .continue-btn:hover, #menu:hover {
     background-color: rgb(231, 255, 229);
     border: 0.5vw solid rgb(0, 196, 10);
     cursor: pointer;
 }
 
 #bar {
+    color: white;
     font-size: 3vw;
     display: flex;
     top: 0;
@@ -86,13 +116,21 @@ button {
 }
 
 #bar p {
-    margin: 0
+    color: rgb(245, 245, 220);
+    margin: 0;
+    text-shadow: 2px 2px black;
 }
 
 #bar button {
-    font-size: 1.6vw;
+    font-size: 1.3vw;
     z-index: 4;
-    height: 6vh;
+    height: 5vh;
     width: 8vw;
     margin: 0
+}
+
+.win-text {
+    color: rgb(245, 245, 220);
+    text-shadow: 2px 2px black;
+    font-size: 12rem;
 }
