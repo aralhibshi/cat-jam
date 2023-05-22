@@ -34,4 +34,4 @@
 
 ## Bugs and Improvements
 - Some expected bugs which need to be fixed, I'll continue working on this project until Thursday (End of Unit 1 at General Assembly).
-- Overall, the code is a bit messy and not very optimized. This project started out as an experiment with jQuery but then turned into something a bit more useful.
+- Overall, the code is a bit messy and not very optimized because this project started out as an experiment with jQuery but then turned into something a bit more useful.
