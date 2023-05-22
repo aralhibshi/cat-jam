@@ -34,8 +34,9 @@ console.log(intEnemy)
 
 for (let i = 0; i < intEnemy; i++) {
     let intEnemy2 = randomInt(2, 32)
+    let intEnemy3 = randomInt(1, 4)
     if (intEnemy2 !== intGoal) {
-        $(`.item${intEnemy2}`).css({"background-image": "url('/images/jabbar.png')", "background-size": "100%"})
+        $(`.item${intEnemy2}`).css({"background-image": `url('/images/enemies/${intEnemy3}.gif')`, "background-size": "100%"})
     }
 }
 
@@ -68,11 +69,11 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.5
-horizontal.volume = 0.45
-vertical.volume = 0.22
-win.volume = 0.4
-thud.volume = 0.9
+theme.volume = 0.4
+horizontal.volume = 0.35
+vertical.volume = 0.12
+win.volume = 0.3
+thud.volume = 0.8
 
 audioArray.forEach(element => {
     return element = $('#' + element)
@@ -329,26 +330,24 @@ function blockEnemy(way, enemy) {
 }
 
 // Actions
-let enemyUrl = 'url("http://127.0.0.1:5500/images/jabbar.png")'
-
 const action = {
     moveLeft() {
-        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin && !($(`.item${position - 1}`).css("background-image") === enemyUrl)) {
+        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin && !($(`.item${position - 1}`).css("background-image").includes("enemies"))) {
             console.log($(`.item${position - 1}`).css("background-image"))
             position--
             horizontalMove("-=10vw", "scaleX(-1)")
-        } else if (!gameWin && ($(`.item${position - 1}`).css("background-image") === enemyUrl)) {
+        } else if (position !== 1 && (!gameWin && ($(`.item${position - 1}`).css("background-image").includes("enemies")))) {
             blockEnemy("left", $(`.item${position - 1}`))
-        } else if (!gameWin){
+        } else if (!gameWin) {
             blockMove("left")
         }
         winCondition()
     },
     moveUp() {
-        if (!(position <= 10) && !gameWin && !($(`.item${position - 10}`).css("background-image") === enemyUrl)) {
+        if (!(position <= 10) && !gameWin && !($(`.item${position - 10}`).css("background-image").includes("enemies"))) {
             position -= 10
             verticalMove("-=10vw", "up")
-        } else if (!gameWin && ($(`.item${position - 10}`).css("background-image") === enemyUrl)) {
+        } else if (position > 10 && !gameWin && ($(`.item${position - 10}`).css("background-image").includes("enemies"))) {
             blockEnemy("up", $(`.item${position - 10}`))
         } else if (!gameWin) {
             blockMove("up")
@@ -356,10 +355,10 @@ const action = {
         winCondition()
     },
     moveRight() {
-        if (position % 10 !== 0 && !gameWin && !($(`.item${position + 1}`).css("background-image") === enemyUrl)) {
+        if (position % 10 !== 0 && !gameWin && !($(`.item${position + 1}`).css("background-image").includes("enemies"))) {
             position++
             horizontalMove("+=10vw", "")
-        } else if (!gameWin && ($(`.item${position + 1}`).css("background-image") === enemyUrl))  {
+        } else if (position % 10 !== 0 && !gameWin && ($(`.item${position + 1}`).css("background-image").includes("enemies")))  {
             blockEnemy("right", $(`.item${position + 1}`))
         } else if (!gameWin) {
             blockMove("right")
@@ -367,10 +366,10 @@ const action = {
         winCondition()
     },
     moveDown() {
-        if (!(position >= 41) && !gameWin && !($(`.item${position + 10}`).css("background-image") === enemyUrl)) {
+        if (!(position >= 41) && !gameWin && !($(`.item${position + 10}`).css("background-image").includes("enemies"))) {
             position += 10
             verticalMove("+=10vw", "up")
-        } else if (!gameWin && ($(`.item${position + 10}`).css("background-image") === enemyUrl)) {
+        } else if (position < 41 && !gameWin && ($(`.item${position + 10}`).css("background-image").includes("enemies"))) {
             blockEnemy("down", $(`.item${position + 10}`))
         } else if (!gameWin) {
             blockMove("down")
