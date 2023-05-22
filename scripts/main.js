@@ -15,21 +15,51 @@ for (let i = 1; i < 51; i++) {
     $('#grid-item').css("border", "2px solid black")
 }
 
+// Random Integer
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + min;
+}
+
+// Goal
+let goalArr = [12, 13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34, 35, 36, 37, 38, 39]
+let randomGoalIndex = randomInt(0, 23)
+let intGoal = goalArr[randomGoalIndex]
+
+let goal = '.item' + intGoal
+
+// Enemies
+let intEnemy = randomInt(4, 6)
+
+console.log(intEnemy)
+
+for (let i = 0; i < intEnemy; i++) {
+    let intEnemy2 = randomInt(2, 32)
+    if (intEnemy2 !== intGoal) {
+        $(`.item${intEnemy2}`).css({"background-image": "url('/images/jabbar.png')", "background-size": "100%"})
+    }
+}
+
 // OVERLAY / MENU ---
+body.prepend("<div id='bar'></div>")
+let bar = $('#bar')
+
+bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} People Left</p>`)
+$('#amount').css({"position": "absolute", "right": "0.5vw", "top": "1vh", "z-index": 3})
+
 let isOverlay = true
 
 function showOverlay() {
     if (isOverlay) {
         body.prepend("<div id='overlay'></div>")
         let overlay = $('#overlay')
-        overlay.css({"background-color": "rgba(128, 128, 128)", "height": "100vh", "width": "100vw", "z-index": 3, "position": "absolute", "left": 0, "top": 0})
+        overlay.css({"background-image": "url('/images/bg.jpeg')", "background-size": "100%", "height": "100vh", "width": "100vw", "z-index": 3, "position": "absolute", "left": 0, "top": 0})
     }
     return overlay
 }
 showOverlay()
 
 // AUDIO ---
-const audioArray = ["theme", "win", "thud", "horizontal", "vertical"]
+const audioArray = ["theme", "win", "horizontal", "vertical", "thud", "hurt"]
 
 audioArray.forEach(element => {
     const audio = new Audio("sounds/" + element + ".mp3")
@@ -38,10 +68,11 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.6
-win.volume = 0.6
-horizontal.volume = 0.55
-vertical.volume = 0.32
+theme.volume = 0.5
+horizontal.volume = 0.45
+vertical.volume = 0.22
+win.volume = 0.4
+thud.volume = 0.9
 
 audioArray.forEach(element => {
     return element = $('#' + element)
@@ -68,14 +99,9 @@ function newGameStart() {
 // START GAME ---
 let gameWin = false
 
-// Random Integer
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + min;   
-}
-
-let intGoal = randomInt(3, 50)
-
 function startGame () {
+    $('#amount').remove()
+
     audioControl(theme)
     
     body.prepend("<div id='bar'></div>")
@@ -88,13 +114,10 @@ function startGame () {
         window.location.reload()
     })
 
-    bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} Left</p>`)
+    bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} People Left</p>`)
     $('#amount').css("text-align", "right")
 
-    let goal = '.item' + intGoal
-
-    $(goal).css("border", "5px solid green")
-    $(goal).css("z-index", 2)
+    $(goal).css({"border": "5px solid green", "z-index": 2, "background-image": "url('/images/where.gif')", "background-size": "100%"})
 
     $(document).ready(function(){
         $(this).keydown(function(e) {
@@ -128,18 +151,15 @@ if (isOverlay) {
     let continueGame = $("#continue-game")
 
     newGame.on("click", () => {
-        let response = confirm("New Game?")
+        
+        let response = confirm("Are you sure?")
 
         if (response) {
-            console.log("Ok was pressed")
-
             newGameStart()
             startGame()
             overlay.remove()
             continueGame.remove()
             newGame.remove()
-        } else {
-            console.log("Cancel was pressed")
         }
     })
 
@@ -160,10 +180,10 @@ let intName = randomInt(0, getNames.length - 1)
 // Win Outcome
 function winCondition() {
     if (intGoal === position) {
+        $(goal).css("background-image", "")
+
         let namesGet = localStorage.getItem("names")
         console.log(JSON.parse(namesGet)[intName])
-        
-        // bar.append(`${JSON.parse(namesGet)[intName]}`)
 
         player.css("background-image", "url('/images/player-win.gif'")
 
@@ -211,11 +231,11 @@ function winCondition() {
 
                 container.css("justify-content", "end")
                 
-            }, 3000)
+            }, 2500)
 
             $('#win-text').remove()
 
-        }, 1500)
+        }, 800)
 
         // Show Player
         setTimeout(() => {
@@ -240,7 +260,7 @@ function winCondition() {
                 }, 380)
             }, 200)
 
-        }, 2700)
+        }, 1600)
 
         // Win Message
         setTimeout(() => {
@@ -252,7 +272,7 @@ function winCondition() {
             container.css({"z-index": 10, "justify-content": "center"})
 
 
-        }, 5500)
+        }, 4300)
 
         theme.pause()
         audioControl(win)
@@ -278,7 +298,7 @@ function verticalMove(topValue, way) {
     audioControl(vertical)
 }
 
-// Player Filter Gray
+// Player Filter Gray (Wall)
 function blockMove(way) {
     gridContainer.effect("shake", {distance: 8, direction: way}, 220)
     player.effect("shake", {distance: 8, direction: way}, 220)
@@ -290,39 +310,68 @@ function blockMove(way) {
     audioControl(thud)
 }
 
+// Player Filter Red (Enemy)
+function blockEnemy(way, enemy) {
+    gridContainer.effect("shake", {distance: 8, direction: way}, 220)
+    player.css("filter", "hue-rotate(320deg) contrast(200%)")
+
+    setTimeout(function() {
+        player.css("filter", "hue-rotate(0deg)")
+    }, 250)
+    audioControl(hurt)
+    audioControl(thud)
+
+    enemy.css("border", "5px solid red")
+
+    setTimeout(() => {
+        enemy.css("border", "1px solid rgb(215, 214, 214)")
+    }, 200)
+}
+
 // Actions
+let enemyUrl = 'url("http://127.0.0.1:5500/images/jabbar.png")'
+
 const action = {
     moveLeft() {
-        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin) {
+        if (!posArray.slice(0, 4).includes(position) && position !== 1 && !gameWin && !($(`.item${position - 1}`).css("background-image") === enemyUrl)) {
+            console.log($(`.item${position - 1}`).css("background-image"))
             position--
             horizontalMove("-=10vw", "scaleX(-1)")
-        } else if (!gameWin) {
+        } else if (!gameWin && ($(`.item${position - 1}`).css("background-image") === enemyUrl)) {
+            blockEnemy("left", $(`.item${position - 1}`))
+        } else if (!gameWin){
             blockMove("left")
         }
         winCondition()
     },
     moveUp() {
-        if (!(position <= 10) && !gameWin) {
+        if (!(position <= 10) && !gameWin && !($(`.item${position - 10}`).css("background-image") === enemyUrl)) {
             position -= 10
             verticalMove("-=10vw", "up")
+        } else if (!gameWin && ($(`.item${position - 10}`).css("background-image") === enemyUrl)) {
+            blockEnemy("up", $(`.item${position - 10}`))
         } else if (!gameWin) {
             blockMove("up")
         }
         winCondition()
     },
     moveRight() {
-        if (position % 10 !== 0 && !gameWin) {
+        if (position % 10 !== 0 && !gameWin && !($(`.item${position + 1}`).css("background-image") === enemyUrl)) {
             position++
             horizontalMove("+=10vw", "")
+        } else if (!gameWin && ($(`.item${position + 1}`).css("background-image") === enemyUrl))  {
+            blockEnemy("right", $(`.item${position + 1}`))
         } else if (!gameWin) {
             blockMove("right")
         }
         winCondition()
     },
     moveDown() {
-        if (!(position >= 41) && !gameWin) {
+        if (!(position >= 41) && !gameWin && !($(`.item${position + 10}`).css("background-image") === enemyUrl)) {
             position += 10
             verticalMove("+=10vw", "up")
+        } else if (!gameWin && ($(`.item${position + 10}`).css("background-image") === enemyUrl)) {
+            blockEnemy("down", $(`.item${position + 10}`))
         } else if (!gameWin) {
             blockMove("down")
         }

@@ -77,7 +77,7 @@ button {
 .win-message {
     font-family: 'Press Start 2P', cursive;
     color: white;
-    font-size: 2.8rem;
+    font-size: 3vw;
 }
 
 .win-btns {
@@ -89,7 +89,7 @@ button {
 
 .student-name {
     font-family: 'Press Start 2P', cursive;
-    font-size: 4rem;
+    font-size: 5vw;
     color: green
 }
 
