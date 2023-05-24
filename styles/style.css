@@ -6,6 +6,7 @@ body {
     /* background-color: rgb(75, 75, 75); */
     background-image: url('/images/bg2.jpeg');
     background-size: 100%;
+    overflow: hidden;
 }
 
 #player {

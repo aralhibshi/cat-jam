@@ -284,7 +284,7 @@ function winCondition() {
             dancer1.animate({"left": "32vw"}, 18000)
 
             // Dancer 2
-            let randomDancer2 = randomInt(3, 6)
+            let randomDancer2 = randomInt(4, 6)
             body.append(`<img class='dancer2' src='/images/dancers/dancer${randomDancer2}.gif'>`)
             let dancer2 = $('.dancer2')
             dancer2.css({"z-index": 5, "position": "absolute", "right": "-13vw", "top": "73vh", "height": "10vw"})
