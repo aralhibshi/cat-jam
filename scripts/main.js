@@ -30,11 +30,9 @@ let goal = '.item' + intGoal
 // Enemies
 let intEnemy = randomInt(4, 6)
 
-console.log(intEnemy)
-
 for (let i = 0; i < intEnemy; i++) {
-    let intEnemy2 = randomInt(2, 32)
-    let intEnemy3 = randomInt(1, 4)
+    let intEnemy2 = randomInt(2, 32) // Enemy Position
+    let intEnemy3 = randomInt(1, 5) // Select Enemy Type
     if (intEnemy2 !== intGoal) {
         $(`.item${intEnemy2}`).css({"background-image": `url('/images/enemies/${intEnemy3}.gif')`, "background-size": "100%"})
     }
@@ -69,10 +67,10 @@ audioArray.forEach(element => {
 })
 
 // Volume
-theme.volume = 0.4
+theme.volume = 0.35
 horizontal.volume = 0.35
-vertical.volume = 0.12
-win.volume = 0.3
+vertical.volume = 0.15
+win.volume = 0.30
 thud.volume = 0.8
 
 audioArray.forEach(element => {
@@ -118,21 +116,22 @@ function startGame () {
     bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} People Left</p>`)
     $('#amount').css("text-align", "right")
 
-    $(goal).css({"border": "5px solid green", "z-index": 2, "background-image": "url('/images/where.gif')", "background-size": "100%"})
+    $(goal).css({"z-index": 2, "background-image": "url('/images/where.gif')", "background-size": "100%"})
+    $(goal).attr("id", "goal")
 
     $(document).ready(function(){
         $(this).keydown(function(e) {
             e.preventDefault()
-            if (e.keyCode == 37 && !gameWin) {
+            if ((e.keyCode == 37 || e.keyCode == 65) && !gameWin) {
                 action.moveLeft()
             }
-            if (e.keyCode == 38 && !gameWin) {
+            if ((e.keyCode == 38 || e.keyCode == 87) && !gameWin) {
                 action.moveUp()
             }
-            if (e.keyCode == 39 && !gameWin) {
+            if ((e.keyCode == 39 || e.keyCode == 68) && !gameWin) {
                 action.moveRight()
             }
-            if (e.keyCode == 40 && !gameWin) {
+            if ((e.keyCode == 40 || e.keyCode == 83) && !gameWin) {
                 action.moveDown()
             }
         })
@@ -181,7 +180,7 @@ let intName = randomInt(0, getNames.length - 1)
 // Win Outcome
 function winCondition() {
     if (intGoal === position) {
-        $(goal).css("background-image", "")
+        $(goal).css({"background-image": "url('/images/border-win.gif')", "border-image": "url('/images/border-win.gif')"})
 
         let namesGet = localStorage.getItem("names")
         console.log(JSON.parse(namesGet)[intName])
@@ -274,6 +273,29 @@ function winCondition() {
 
 
         }, 4300)
+
+        // Dancers
+        setTimeout(() => {
+            // Dancer 1
+            let randomDancer1 = randomInt(1, 3)
+            body.append(`<img class='dancer1' src='/images/dancers/dancer${randomDancer1}.gif'>`)
+            let dancer1 = $('.dancer1')
+            dancer1.css({"z-index": 5, "position": "absolute", "left": "-13vw", "top": "73vh", "height": "10vw"})
+            dancer1.animate({"left": "32vw"}, 18000)
+
+            // Dancer 2
+            let randomDancer2 = randomInt(3, 6)
+            body.append(`<img class='dancer2' src='/images/dancers/dancer${randomDancer2}.gif'>`)
+            let dancer2 = $('.dancer2')
+            dancer2.css({"z-index": 5, "position": "absolute", "right": "-13vw", "top": "73vh", "height": "10vw"})
+            dancer2.animate({"right": "30vw"}, 18000)
+
+            // Coffin Dancer
+            body.append(`<img class='coffinDancer' src='/images/dancers/dancer7.gif'>`)
+            let coffinDancer = $('.coffinDancer')
+            coffinDancer.css({"z-index": 4, "position": "absolute", "right": "-15vw", "top": "2vh", "height": "6vw"})
+            coffinDancer.animate({"right": "110vw"}, 20000)
+        }, 1500)
 
         theme.pause()
         audioControl(win)

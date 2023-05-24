@@ -3,7 +3,9 @@ body {
      */
     font-family: 'Rajdhani', sans-serif;
     font-weight: bold;
-    background-color: rgb(75, 75, 75);
+    /* background-color: rgb(75, 75, 75); */
+    background-image: url('/images/bg2.jpeg');
+    background-size: 100%;
 }
 
 #player {
@@ -58,7 +60,6 @@ button {
     border-radius: 26% 26% 26% 26% / 80% 80% 80% 80%;
     margin: 3vh 0;
     border: 0.5vw solid rgb(245, 245, 220);
-    /* box-shadow: 0.15vw 0.8vh rgba(0, 0, 0, 0.15); */
 }
 
 .container button:hover {
@@ -133,4 +134,9 @@ button {
     color: rgb(245, 245, 220);
     text-shadow: 2px 2px black;
     font-size: 12rem;
+}
+
+#goal {
+    border-image: url('/images/border.gif') 17% fill;
+    border-image-width: 20vw;
 }
