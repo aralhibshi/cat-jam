@@ -86,7 +86,7 @@ function audioControl (audio) {
 
 // NEW GAME ---
 
-// Names - Removed 1 Name - Khalid
+// Names
 let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa", "Manar", "Mariam Merza", "Maryam Ismail", "Maryam Alnajem", "Rawan", "Ruqaya", "Salman Hamad", "Salman Murtaza", "Sarah", "Saud", "Sayed", "Sumaya", "Waleed", "Zainab AbdulJalil", "Zainab Adel", "Zainab Mohammed", "Zainab Saeed"]
 
 // New Game Function

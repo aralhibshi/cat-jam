@@ -18,7 +18,7 @@
 
 ## Objective
 
-- The Goal of the game is to move to highlighted box. Enemies are randomly generated to act a barricades.
+- The Goal of the game is to move to the highlighted box. Enemies are randomly generated to act a barricades.
 
 ---
 
