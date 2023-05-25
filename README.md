@@ -7,12 +7,12 @@
 
 ---
 
-## Controls (Sorry, I'm left-handed)
+## Controls
 
-- Move Left - `Left Arrow`
-- Move Up - `Up Arrow`
-- Move Down - `Down Arrow`
-- Move Right - `Right Arrow`
+- Move Left - `Left Arrow` or `A`
+- Move Up - `Up Arrow` or `W`
+- Move Right - `Right Arrow` or `D`
+- Move Down - `Down Arrow` or `S`
 
 ---
 
