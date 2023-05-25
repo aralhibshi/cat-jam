@@ -86,7 +86,7 @@ function audioControl (audio) {
 
 // NEW GAME ---
 
-// Names
+// Names - Removed 1 Name - Khalid
 let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa", "Manar", "Mariam Merza", "Maryam Ismail", "Maryam Alnajem", "Rawan", "Ruqaya", "Salman Hamad", "Salman Murtaza", "Sarah", "Saud", "Sayed", "Sumaya", "Waleed", "Zainab AbdulJalil", "Zainab Adel", "Zainab Mohammed", "Zainab Saeed"]
 
 // New Game Function
@@ -278,20 +278,20 @@ function winCondition() {
         setTimeout(() => {
             // Dancer 1
             let randomDancer1 = randomInt(1, 3)
-            body.append(`<img class='dancer1' src='/images/dancers/dancer${randomDancer1}.gif'>`)
+            body.append(`<img class='dancer1' src='./images/dancers/dancer${randomDancer1}.gif'>`)
             let dancer1 = $('.dancer1')
             dancer1.css({"z-index": 5, "position": "absolute", "left": "-13vw", "top": "73vh", "height": "10vw"})
             dancer1.animate({"left": "32vw"}, 18000)
 
             // Dancer 2
             let randomDancer2 = randomInt(4, 6)
-            body.append(`<img class='dancer2' src='/images/dancers/dancer${randomDancer2}.gif'>`)
+            body.append(`<img class='dancer2' src='./images/dancers/dancer${randomDancer2}.gif'>`)
             let dancer2 = $('.dancer2')
             dancer2.css({"z-index": 5, "position": "absolute", "right": "-13vw", "top": "73vh", "height": "10vw"})
             dancer2.animate({"right": "30vw"}, 18000)
 
             // Coffin Dancer
-            body.append(`<img class='coffinDancer' src='/images/dancers/dancer7.gif'>`)
+            body.append(`<img class='coffinDancer' src='./images/dancers/dancer7.gif'>`)
             let coffinDancer = $('.coffinDancer')
             coffinDancer.css({"z-index": 4, "position": "absolute", "right": "-15vw", "top": "2vh", "height": "6vw"})
             coffinDancer.animate({"right": "110vw"}, 20000)
