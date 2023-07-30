@@ -42,6 +42,13 @@ for (let i = 0; i < intEnemy; i++) {
 body.prepend("<div id='bar'></div>")
 let bar = $('#bar')
 
+// Names
+let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa", "Manar", "Mariam Merza", "Maryam Ismail", "Maryam Alnajem", "Rawan", "Ruqaya", "Salman Hamad", "Salman Murtaza", "Sarah", "Saud", "Sayed", "Sumaya", "Waleed", "Zainab AbdulJalil", "Zainab Adel", "Zainab Mohammed", "Zainab Saeed"]
+
+if (!localStorage.getItem("names")) {
+    localStorage.setItem("names", JSON.stringify(names))
+}
+
 bar.append(`<p id='amount'>${JSON.parse(localStorage.getItem("names")).length} People Left</p>`)
 $('#amount').css({"position": "absolute", "right": "0.5vw", "top": "1vh", "z-index": 3})
 
@@ -85,9 +92,6 @@ function audioControl (audio) {
 }
 
 // NEW GAME ---
-
-// Names
-let names = ["Ahmed", "Ali", "Almira", "Aysha", "Ebrahim", "Fatima", "Hasan", "Heba", "Husain", "Jawaher", "Khalid", "Latifa", "Manar", "Mariam Merza", "Maryam Ismail", "Maryam Alnajem", "Rawan", "Ruqaya", "Salman Hamad", "Salman Murtaza", "Sarah", "Saud", "Sayed", "Sumaya", "Waleed", "Zainab AbdulJalil", "Zainab Adel", "Zainab Mohammed", "Zainab Saeed"]
 
 // New Game Function
 function newGameStart() {
